@@ -1,0 +1,28 @@
+{
+  "name": "erc865_with_relay",
+  "version": "1.0.0",
+  "description": "Truffle project with ERC865 and token relay service, testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helderjnpinto/ERC865_with_relay.git"
+  },
+  "keywords": [
+    "ERC865",
+    "node",
+    "truffle",
+    "relay",
+    "gassless",
+    "transfer",
+    "ERC20"
+  ],
+  "author": "helderjnpinto",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/helderjnpinto/ERC865_with_relay/issues"
+  },
+  "homepage": "https://github.com/helderjnpinto/ERC865_with_relay#readme"
+}
