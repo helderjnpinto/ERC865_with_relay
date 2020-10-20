@@ -24,5 +24,9 @@
   "bugs": {
     "url": "https://github.com/helderjnpinto/ERC865_with_relay/issues"
   },
-  "homepage": "https://github.com/helderjnpinto/ERC865_with_relay#readme"
+  "homepage": "https://github.com/helderjnpinto/ERC865_with_relay#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.2.0",
+    "truffle": "^5.1.49"
+  }
 }
