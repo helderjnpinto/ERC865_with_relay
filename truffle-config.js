@@ -49,6 +49,9 @@ module.exports = {
       provider: () => new HDWalletProvider(mnemonic, `https://rpc-mumbai.matic.today`),
       host: "https://rpc-mumbai.matic.today", // Localhost (default: none)
       network_id: "80001", // Any network (default: none)
+      confirmations: 1,
+      timeoutBlocks: 200,
+      skipDryRun: true
     },
     // Another network with more advanced options...
     // advanced: {

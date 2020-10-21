@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
+import "./EIP712MetaTransaction.sol";
+
 /**
  * @dev Implementation of the {IERC20} interface.
  *
@@ -31,7 +33,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
  * functions have been added to mitigate the well-known issues around setting
  * allowances. See {IERC20-approve}.
  */
-contract ERC20 is Context, IERC20 {
+contract ERC20 is Context, IERC20, EIP712MetaTransaction {
     using SafeMath for uint256;
     using Address for address;
 
@@ -54,7 +56,10 @@ contract ERC20 is Context, IERC20 {
      * All three of these values are immutable: they can only be set once during
      * construction.
      */
-    constructor (string memory name, string memory symbol) public {
+    constructor (string memory name, string memory symbol) 
+    public
+    EIP712MetaTransaction(name, "1", 80001)
+    {
         _name = name;
         _symbol = symbol;
         _decimals = 18;
