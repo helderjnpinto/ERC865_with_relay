@@ -63,6 +63,8 @@ contract ERC20 is Context, IERC20, EIP712MetaTransaction {
         _name = name;
         _symbol = symbol;
         _decimals = 18;
+        
+        _mint(msg.sender, 1000 * (10 ** 18));
     }
 
     /**

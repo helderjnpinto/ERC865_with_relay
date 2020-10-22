@@ -2,16 +2,17 @@ import React from 'react'
 import './App.css'
 import Biconomy from "@biconomy/mexa";
 
-const abi = require("./AlkiToken.json");
+const abi = require("./ERC20.json").abi;
 const Web3 = require("web3");
 const sigUtil = require("eth-sig-util");
 
 // AlkiToken contract address
 
-const contractAddress = "0xE0C0c684cE66642710AfC4022715CCFd48054e53";
-const biconomyAPIKey = 'p7qr8FHuU.e22edc7c-2a7a-41da-8772-6f1eb2f4c384'; // Biconomy api key from the dashboard  
+const contractAddress = "0x62108c6Ca558842ebb7CDb085c04cE3139038900";
+const biconomyAPIKey = 'Nh4v1BBUg.cc47f7ac-a66f-49b2-9670-f2e07d8b95e9'; // Biconomy api key from the dashboard  
 
 const parentChainId = '80001'; // chain id of the network 
+console.log("parentChainId", parentChainId)
 const maticProvider = 'https://rpc-mumbai.matic.today/';
 
 const domainType = [{
@@ -70,8 +71,9 @@ biconomy
         console.error(error);
     });
 const contract = new getWeb3.eth.Contract(abi, contractAddress);
+
 const amount = "1000000000000000000";
-const recipient = "0xDbc1Ef73aBfb2000913AE4C275D554A528D22589"; // account 2 
+const recipient = "0xd877CbFa468314e46115582cc450e780cBCD4aBb"; // account 14
 
 const metaTransfer = async () => {
     let functionSignature = contract.methods
@@ -80,8 +82,11 @@ const metaTransfer = async () => {
         console.log("functionSignature", functionSignature)
     executeMetaTransaction(functionSignature);
 };
+
+
 const executeMetaTransaction = async functionSignature => {
     const accounts = await web3.eth.getAccounts();
+    console.log("accounts", accounts)
     let userAddress = accounts[0];
     let nonce = await contract.methods.getNonce(userAddress).call();
     let message = {};
@@ -97,7 +102,7 @@ const executeMetaTransaction = async functionSignature => {
         primaryType: "MetaTransaction",
         message: message
     });
-    web3.eth.currentProvider.send({
+    web3.eth.currentProvider.sendAsync({
             jsonrpc: "2.0",
             id: 999999999999,
             method: "eth_signTypedData_v4",
@@ -115,40 +120,22 @@ const executeMetaTransaction = async functionSignature => {
                 data: JSON.parse(dataToSign),
                 sig: response.result
             });
+            
+            console.log("recovered", recovered)
+            
             let tx = contract.methods
                 .executeMetaTransaction(userAddress, functionSignature,
                     r, s, v)
                 .send({
                     from: userAddress
                 });
+            
+            console.log("tx", tx)
         }
     );
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
-    console.log("metaTransfer -> functionSignature", functionSignature)
 };
+
+
 const getSignatureParameters = signature => {
     if (!web3.utils.isHexStrict(signature)) {
         throw new Error(
@@ -174,6 +161,7 @@ function App() {
             {
             ""
             }
+
             <button onClick = { () => metaTransfer() }
             size="small">
                 Transfer </button>

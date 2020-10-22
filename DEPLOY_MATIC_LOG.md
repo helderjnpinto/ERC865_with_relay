@@ -1,4 +1,4 @@
-npx truffle deploy --network matic
+npx truffle deploy --network matic --reset
 
 Compiling your contracts...
 ===========================
@@ -16,25 +16,23 @@ Starting migrations...
 1_initial_migration.js
 ======================
 
-   Deploying 'Migrations'
+   Replacing 'Migrations'
    ----------------------
-   > transaction hash:    0x69da4e5004fc917a7da97931afea4502740e56ca147c6da4b9cdd3ee34f1171e
-   > Blocks: 2            Seconds: 5
-   > contract address:    0x127446A4E5aD984AB6Bd0fB164fCFEbD754b8202
-   > block number:        5804953
-   > block timestamp:     1603294257
+   > transaction hash:    0x45c4d9dd1e896845c6ebd2f3a7c7769e350f7be8a5ee8f7ee51ba87ae5c1b5e2
+   > Blocks: 2            Seconds: 4
+   > contract address:    0xce16B90A74A116c9Bb4b3FdC7D758e9616Ea5CBb
+   > block number:        5805114
+   > block timestamp:     1603294587
    > account:             0xE0C0c684cE66642710AfC4022715CCFd48054e53
-   > balance:             3.48161266
+   > balance:             3.44292532
    > gas used:            192159 (0x2ee9f)
    > gas price:           20 gwei
    > value sent:          0 ETH
    > total cost:          0.00384318 ETH
 
-   Pausing for 5 confirmations...
+   Pausing for 1 confirmations...
    ------------------------------
-   > confirmation number: 2 (block: 5804956)
-   > confirmation number: 4 (block: 5804958)
-   > confirmation number: 6 (block: 5804960)
+   > confirmation number: 2 (block: 5805117)
 
    > Saving migration to chain.
    > Saving artifacts
@@ -45,33 +43,31 @@ Starting migrations...
 2_initial_migration.js
 ======================
 
-   Deploying 'ERC20'
+   Replacing 'ERC20'
    -----------------
-   > transaction hash:    0xfb60e7c95376dcc903b32a330f34ed7a059a20040dfdd3a3849d267a72ef1668
-   > Blocks: 5            Seconds: 8
-   > contract address:    0xE65fB9f2136a1a9f626fe39C35B3F8D84B9C9ae6
-   > block number:        5804966
-   > block timestamp:     1603294283
+   > transaction hash:    0x53ce4e30a1445103d29046a294b0bd5a9de5749a61310e7bf186f8fa86674092
+   > Blocks: 1            Seconds: 4
+   > contract address:    0x62108c6Ca558842ebb7CDb085c04cE3139038900
+   > block number:        5805121
+   > block timestamp:     1603294605
    > account:             0xE0C0c684cE66642710AfC4022715CCFd48054e53
-   > balance:             3.44731526
-   > gas used:            1672532 (0x198554)
+   > balance:             3.40756018
+   > gas used:            1725919 (0x1a55df)
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.03345064 ETH
+   > total cost:          0.03451838 ETH
 
-   Pausing for 5 confirmations...
+   Pausing for 1 confirmations...
    ------------------------------
-   > confirmation number: 2 (block: 5804970)
-   > confirmation number: 4 (block: 5804972)
-   > confirmation number: 6 (block: 5804974)
+   > confirmation number: 2 (block: 5805124)
 
    > Saving migration to chain.
    > Saving artifacts
    -------------------------------------
-   > Total cost:          0.03345064 ETH
+   > Total cost:          0.03451838 ETH
 
 
 Summary
 =======
 > Total deployments:   2
-> Final cost:          0.03729382 ETH
+> Final cost:          0.03836156 ETH
