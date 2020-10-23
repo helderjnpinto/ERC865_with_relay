@@ -1,7 +1,8 @@
 const sigUtil = require("eth-sig-util");
+const utils = sigUtil.TypedDataUtils;
 const web3_utils = require("web3-utils");
 
-
+const ethUtil = require('ethereumjs-util');
 const domainType = [{
         name: "name",
         type: "string"
@@ -64,9 +65,21 @@ const getSignatureParameters = (signature) => {
 module.exports = {
     domainType,
     metaTransferTypes,
+    encodeMetaTransferType: function (types) {
+        return ethUtil.bufferToHex(utils.hashType('MetaTransfer', types));
+    },
+    encodeDomainData: function (domainData, types) {
+        return ethUtil.bufferToHex(utils.hashStruct('EIP712Domain', domainData, types));
+    },
+    encodePrimaryType: function (primaryType, message, types) {
+        return ethUtil.bufferToHex(utils.hashStruct(primaryType, message, types));
+    },
+    encodeMetaTransferStruct: function (metaTransferData, types) {
+        return ethUtil.bufferToHex(utils.hashStruct('MetaTransfer', metaTransferData, types));
+    },
     domainData: function (contractAddress, parentChainId = 80001) {
         return {
-            name: "AlkiToken",
+            name: "Alki gold token",
             version: "1",
             chainId: parentChainId,
             verifyingContract: contractAddress
@@ -83,7 +96,6 @@ module.exports = {
         }
     },
     encodeDataToSign: function (metaTransfer, contractAddress, parentChainId = 80001) {
-        console.log("metaTransferTypes", metaTransferTypes)
         return {
             types: {
                 EIP712Domain: domainType,
@@ -106,20 +118,18 @@ module.exports = {
     },
     signTypedData_v4: function (privateKey, dataToSign) {
         const _dataToSign = dataToSign instanceof String ? JSON.parse(dataToSign) : dataToSign;
-        console.log("_dataToSign signTypedData_v4", _dataToSign)
-
         const _privateKey = privateKey.startsWith("0x") ? privateKey.slice(2) : privateKey;
         return sigUtil.signTypedData_v4(Buffer.from(_privateKey, 'hex'), { data: _dataToSign });
     },
     recoverTypedSignature_v4: function (dataToSign, signature) {
-        return sigUtil.recoverTypedSignature_v4({
-            data: JSON.parse(dataToSign),
+        return sigUtil.recoverTypedSignature({
+            data: dataToSign,
             sig: signature
         });
     },
     executeMetaTransferOn: function (contractInstance, params, opts = {}) {
         return contractInstance.contract.methods
-                .executeMetaTransaction(...params)
+                .executeMetaTransfer(...params)
                 .send(...opts);
     }
     

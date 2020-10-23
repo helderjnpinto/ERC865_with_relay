@@ -7,11 +7,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 
 abstract contract EIP712MetaTransaction is EIP712Base {
     using SafeMath for uint256;
-    bytes32 private constant META_TRANSFER_TYPEHASH = keccak256(
-        bytes(
-            "MetaTransfer(address from, address to, uint256 value, uint256 fee, uint256 nonce)"
-        )
-    );
+    bytes32 private constant META_TRANSFER_TYPEHASH = keccak256(bytes("MetaTransfer(address from,address to,uint256 value,uint256 fee,uint256 nonce)"));
     address relayer;
 
     event RelayerChange(address newRelayer);
@@ -79,7 +75,6 @@ abstract contract EIP712MetaTransaction is EIP712Base {
         _transferERC20andFee(signer, to, value, fee);
 
         nonces[signer] = nonces[signer].add(1);
-        
     }
 
     function hashMetaTransfer(MetaTransfer memory metaTx)
