@@ -49,4 +49,22 @@ contract EIP712Base {
         return keccak256(abi.encodePacked("\x19\x01", getDomainSeperator(), messageHash));
     }
 
+
+    function verify(
+        address signer,
+        bytes32 signatureHash,
+        bytes32 sigR,
+        bytes32 sigS,
+        uint8 sigV
+    ) public pure returns (bool) {
+        return
+            signer ==
+            ecrecover(
+                signatureHash,
+                sigV,
+                sigR,
+                sigS
+            );
+    }
+
 }

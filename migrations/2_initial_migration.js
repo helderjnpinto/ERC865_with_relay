@@ -1,5 +1,13 @@
-const ERC20 = artifacts.require("ERC20");
-// 0xE65fB9f2136a1a9f626fe39C35B3F8D84B9C9ae6
+const ALKITOKEN = artifacts.require("ALKITOKEN");
+
 module.exports = function (deployer, network, accounts) {
-  deployer.deploy(ERC20, "Alki_mistery_token", "Alki");
+  if (network == "development") return; 
+  
+  const [owner, relayer] = accounts;
+
+  deployer.deploy(ALKITOKEN, "Alki gold token", "Alki", "1", 80001, relayer, {
+    from: owner,
+    overwrite: false
+  });
+
 };

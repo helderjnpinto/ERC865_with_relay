@@ -33,7 +33,7 @@ import "./EIP712MetaTransaction.sol";
  * functions have been added to mitigate the well-known issues around setting
  * allowances. See {IERC20-approve}.
  */
-contract ERC20 is Context, IERC20, EIP712MetaTransaction {
+contract ERC20 is Context, IERC20 {
     using SafeMath for uint256;
     using Address for address;
 
@@ -58,13 +58,10 @@ contract ERC20 is Context, IERC20, EIP712MetaTransaction {
      */
     constructor (string memory name, string memory symbol) 
     public
-    EIP712MetaTransaction(name, "1", 80001)
     {
         _name = name;
         _symbol = symbol;
         _decimals = 18;
-        
-        _mint(msg.sender, 1000 * (10 ** 18));
     }
 
     /**
