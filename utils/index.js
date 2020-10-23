@@ -1,6 +1,7 @@
 const sigUtil = require("eth-sig-util");
 const web3_utils = require("web3-utils");
 
+
 const domainType = [{
         name: "name",
         type: "string"
@@ -18,18 +19,27 @@ const domainType = [{
         type: "address"
     }
 ];
-const metaTransactionType = [{
-        name: "nonce",
-        type: "uint256"
-    },
+const metaTransferTypes = [
     {
         name: "from",
         type: "address"
     },
     {
-        name: "functionSignature",
-        type: "bytes"
-    }
+        name: "to",
+        type: "address"
+    },
+    {
+        name: "value",
+        type: "uint256"
+    },
+    {
+        name: "fee",
+        type: "uint256"
+    },
+    {
+        name: "nonce",
+        type: "uint256"
+    },
 ];
 
 
@@ -53,7 +63,7 @@ const getSignatureParameters = (signature) => {
 
 module.exports = {
     domainType,
-    metaTransactionType,
+    metaTransferTypes,
     domainData: function (contractAddress, parentChainId = 80001) {
         return {
             name: "AlkiToken",
@@ -73,26 +83,33 @@ module.exports = {
         }
     },
     encodeDataToSign: function (metaTransfer, contractAddress, parentChainId = 80001) {
-        const dataToSign = JSON.stringify({
+        console.log("metaTransferTypes", metaTransferTypes)
+        return {
             types: {
                 EIP712Domain: domainType,
-                MetaTransaction: metaTransactionType
+                MetaTransfer: metaTransferTypes
             },
             domain: this.domainData(contractAddress, parentChainId),
             primaryType: "MetaTransfer",
             message: metaTransfer
-        });
-
-        return dataToSign;
+        };
     },
     getSignatureParameters,
-    requestMetamaskSignTypedData_v4: function (web3, userAddress, dataToSign) {
+    requestMetamaskSignTypedData_v4: async function (web3, userAddress, dataToSign) {
+        const _dataToSign = dataToSign instanceof String ? dataToSign : JSON.stringify(dataToSign);
         return await web3.eth.currentProvider.sendAsync({
             jsonrpc: "2.0",
             id: 1001,
             method: "eth_signTypedData_v4",
-            params: [userAddress, dataToSign]
+            params: [userAddress, _dataToSign]
         });
+    },
+    signTypedData_v4: function (privateKey, dataToSign) {
+        const _dataToSign = dataToSign instanceof String ? JSON.parse(dataToSign) : dataToSign;
+        console.log("_dataToSign signTypedData_v4", _dataToSign)
+
+        const _privateKey = privateKey.startsWith("0x") ? privateKey.slice(2) : privateKey;
+        return sigUtil.signTypedData_v4(Buffer.from(_privateKey, 'hex'), { data: _dataToSign });
     },
     recoverTypedSignature_v4: function (dataToSign, signature) {
         return sigUtil.recoverTypedSignature_v4({
@@ -100,8 +117,8 @@ module.exports = {
             sig: signature
         });
     },
-    executeMetaTransferOn: function (contract, params, opts = {}) {
-        return contract.methods
+    executeMetaTransferOn: function (contractInstance, params, opts = {}) {
+        return contractInstance.contract.methods
                 .executeMetaTransaction(...params)
                 .send(...opts);
     }

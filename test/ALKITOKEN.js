@@ -70,31 +70,66 @@ contract("AlkiToken", accounts => {
     })
 
 
-    it('Bob balance is bigger than 1', async function() {
+    it('Bob balance is bigger than 100', async function() {
         const _balance = await alki.balanceOf(bob);
         console.log("balance", _balance.toString())
-        const expectedBalance = ether("1");
+        const expectedBalance = new BN(100);
         expect(_balance.gt(expectedBalance)).to.be.true;
     })
 
 
     it('Bob sign transaction to relayer sending 10 tokens for alice giving 1 of fee', async () => {
         let nonce = await alki.getNonce(bob);
-        console.log("nonce", nonce)
+        console.log("nonce", nonce.toString())
+
+        const PK_8_BOB = process.env.PK_8_BOB;
+        console.log("PK_8_BOB", PK_8_BOB)
+
 
         const metaTx = metaTransfer.encodeMetaTransfer(
             bob,
             alice,
             10,
             1,
-            nonce
+            nonce.toString()
         )
         console.log("metaTx", metaTx)
 
         const encodedDataToSign = metaTransfer.encodeDataToSign(metaTx, alki.address)
         console.log("encodedDataToSign", encodedDataToSign)
-      
+        
+        const messageSigned = metaTransfer.signTypedData_v4(PK_8_BOB, encodedDataToSign);
+        console.log("messageSign", messageSigned)
+        
+
+        const getSignatureParams = metaTransfer.getSignatureParameters(messageSigned);
+        console.log("getSignatureParams", getSignatureParams)
+
+        const receiptMeta = await metaTransfer.executeMetaTransferOn(alki, [
+            bob,
+            alice,
+            10,
+            1,
+            getSignatureParams.r,
+            getSignatureParams.s,
+            getSignatureParams.v,
+        ], { from: relayer });
+        
+        console.log("receiptMeta", receiptMeta)
+        
+        const relayerBalance = await alki.balanceOf(relayer);
+        console.log("relayerBalance", relayerBalance)
+
+        const bobBalance = await alki.balanceOf(bob);
+        console.log("bobBalance", bobBalance)
+        
+        const aliceBalance = await alki.balanceOf(alice);
+        console.log("aliceBalance", aliceBalance)
+    
+
     })
+
+
 
 
 });

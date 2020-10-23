@@ -1,7 +1,7 @@
 const ALKITOKEN = artifacts.require("ALKITOKEN");
 
 module.exports = function (deployer, network, accounts) {
-  if (network == "development") return; 
+  // if (network == "development") return; 
   
   const [owner, relayer] = accounts;
 
